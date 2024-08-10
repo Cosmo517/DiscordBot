@@ -2,8 +2,12 @@
 import os
 import discord
 from discord.ext import commands
-import operator
 from dotenv import load_dotenv
+from common.database.database import SessionLocal, engine
+from fastapi import Depends
+from typing import Annotated
+from sqlalchemy.orm import Session
+import common.database.models as models
 
 # Setting up variables
 load_dotenv()
@@ -11,6 +15,22 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+# Setting up DB
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# To use the database in other files, import db_dependency
+# then add "db: db_dependency" to the parameters of a function
+# afterwards, you can use db to query the database, as well as insert new objects
+db_dependency = Annotated[Session, Depends(get_db)]
+
+# Create all the tables
+models.Base.metadata.create_all(bind=engine)
 
 # Initating Slash Commands
 @bot.event
