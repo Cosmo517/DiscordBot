@@ -1,4 +1,4 @@
-# /Commands/Gambling/blackjack.py
+# /commands/gambling/blackjack.py
 import discord
 from discord.ext import commands
 
