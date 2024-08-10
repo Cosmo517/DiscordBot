@@ -14,7 +14,7 @@ async def test_command(interaction: discord.Interaction, user: discord.User, amo
     # Embeded message
     embed = discord.Embed(
         title="🛠️|Test Command",
-        description=f"The user 🙍{user} was beaten with a 🏒stick x{amount} times!",
+        description=f"The user 🙍{user.display_name} was beaten with a 🏒stick x{amount} times!",
         color=discord.Color.blurple()
     )
     #embed.add_field(name="Test Test", value="test test test", inline=False) # field
