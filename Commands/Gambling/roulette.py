@@ -2,7 +2,7 @@
 import discord
 from discord.ext import commands
 from typing import Literal
-import random as r
+import random as rand
 
 # Define the slash command
 async def roulette_command(interaction: discord.Interaction, amount: int, color: Literal["🔴Red", "⚫Black"]):
@@ -24,35 +24,35 @@ async def roulette_command(interaction: discord.Interaction, amount: int, color:
     red_numbers = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36}
     black_numbers = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35}
     green_numbers = {0, 37}
-    rand_num = r.randint(0, 37)
-    col = discord.Color.blurple()
-    col_name = "purp"
+    rand_num = rand.randint(0, 37)
+    color_val = discord.Color.blurple()
+    color_name = "default"
 
     # sets col, col_name to the correct values
     if rand_num in green_numbers:
         # is green
-        col = discord.Color.green()
-        col_name = "🍏Green"
+        color_val = discord.Color.green()
+        color_name = "🍏Green"
     elif rand_num in red_numbers:
         # is red
-        col = discord.Color.red()
-        col_name = "🔴Red"
+        color_val = discord.Color.red()
+        color_name = "🔴Red"
     else:
         # is black
-        col = discord.Color.dark_grey()
-        col_name = "⚫Black"
+        color_val = discord.Color.dark_grey()
+        color_name = "⚫Black"
 
     # Embeded message
     embed = discord.Embed(
         title="🛞Roulette Game",
         description=f"Amount Bet: ${amount} on {color}",
-        color=col
+        color=color_val
     )
 
     # adds the fields for the results
-    embed.add_field(name="RESULTS:", value=f"{rand_num} {col_name}", inline=False)
+    embed.add_field(name="RESULTS:", value=f"{rand_num} {color_name}", inline=False)
 
-    if color == col_name:
+    if color == color_name:
         embed.add_field(name="WINNINGS:", value=F"${amount}")
     else:
         embed.add_field(name="LOSSES:", value=F"${amount}")
