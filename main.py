@@ -1,95 +1,41 @@
+# Imported Modules
 import os
 import discord
 from discord.ext import commands
 import operator
 from dotenv import load_dotenv
 
+# Setting up variables
 load_dotenv()
-
 TOKEN = os.getenv("DISCORD_TOKEN")
-
 intents = discord.Intents.default()
 intents.message_content = True
-
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-
-@bot.command(name='milestones', help='Lists # of numbers user typed')
-async def milestones(ctx, start, end):
-    counting_channel = discord.utils.get(ctx.guild.channels, name='counting')
-    history_limit = start + end
-    messages = [message async for message in counting_channel.history(limit=history_limit)]
-    count_user_numbers = {}
-    numbers_sent = []
-    for x in messages:  # loop through all messages
-        number_to_check = 0
-        try:
-            number_to_check = int(x.content)
-        except ValueError:
-            print("dead on: " + x.content)
-            continue
-        if int(end) >= number_to_check >= int(start):  # make sure its within bounds
-            if number_to_check not in numbers_sent:  # check if we counted the number already
-                numbers_sent.append(number_to_check)
-                if x.author.name in count_user_numbers:
-                    count_user_numbers[x.author.name] += 1
-                else:
-                    count_user_numbers[x.author.name] = 1
-
-    final_message = f"Counting from {start} to {end}:\n\n"
-    count_user_numbers = sorted(count_user_numbers.items(), key=operator.itemgetter(1), reverse=True)
-    sum = 0
-    for user in count_user_numbers:
-        sum += user[1]
-        final_message += f"{user[0]}: {user[1]}\n"
-
-    print(final_message)
-    print(f'Total sum: {sum}')
-    await ctx.send(final_message)
-
-
-must_restart = False
-
-
+# Initating Slash Commands
 @bot.event
-async def on_message(message):
-    global must_restart
-    # do not react to the bots output
-    if message.author.name == bot.user.name:
-        return
+async def on_ready():
+    """
+    Function that sets up the command tree and imported commands of sub-folder python scripts
 
-    # get the counting channel
-    counting_channel = discord.utils.get(message.guild.channels, name='counting-restarts')
+    Parameters: None
+    Returns: None
+    """
 
-    # only get input from counting_channel
-    if message.channel != counting_channel:
-        return
+    # Guild varaible stuff (The server ID)
+    guild_id = 1271479998154543114
+    guild = discord.Object(id=guild_id)
 
-    # remove a message if it contains words/not base 10
-    try:
-        int(message.content)
-    except:
-        await message.delete()
-        await counting_channel.send("Restart! only base 10 numbers are allowed.")
-        return
+    # Loads the extensions (commands)
+    await bot.load_extension('commands.basic.help')
+    await bot.load_extension('commands.gambling.blackjack')
 
+    # Sets up the command tree
+    bot.tree.copy_global_to(guild=guild)
+    await bot.tree.sync(guild=guild)
 
+    # Confirms the commands are loaded and synced
+    print(f'Logged in as {bot.user} and commands are synced for server {guild_id}')
 
-    # get the previous two messages
-    messages = [message async for message in counting_channel.history(limit=2)]
-
-    # check if messages[1] is the bots name
-    # this means messages[0] should be 1
-    if messages[1].author.name == bot.user.name:
-        if int(messages[0].content) == 1:
-            return
-        else:
-            await message.delete()
-            await counting_channel.send("You must start at 1!")
-    else:
-        if int(messages[0].content) == int(messages[1].content) + 1:
-            return
-        else:
-            await counting_channel.send("You must start at 1!")
-
+# Runs the bot
 bot.run(TOKEN)
