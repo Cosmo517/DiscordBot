@@ -27,8 +27,8 @@ async def on_ready():
     guild = discord.Object(id=guild_id)
 
     # Loads the extensions (commands)
-    await bot.load_extension('Commands.Basic.help')
-    await bot.load_extension('Commands.Gambling.blackjack')
+    await bot.load_extension('commands.basic.help')
+    await bot.load_extension('commands.gambling.blackjack')
 
     # Sets up the command tree
     bot.tree.copy_global_to(guild=guild)
