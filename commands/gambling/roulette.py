@@ -1,8 +1,9 @@
-# /commands/basic/help.py
+# /commands/gambling.roulette.py
 import discord
 from discord.ext import commands
 from typing import Literal
 import random as rand
+#import commands.common.command_functions as c_funct
 
 # Define the slash command
 async def roulette_command(interaction: discord.Interaction, amount: int, color: Literal["🔴Red", "⚫Black"]):
@@ -27,6 +28,10 @@ async def roulette_command(interaction: discord.Interaction, amount: int, color:
     rand_num = rand.randint(0, 37)
     color_val = discord.Color.blurple()
     color_name = "default"
+
+    # the user
+    #db_user = await returnUserEntity(interaction.user.id, interaction.guild.id)
+    #print(db_user.discord_id, db_user.server_id)
 
     # sets col, col_name to the correct values
     if rand_num in green_numbers:
