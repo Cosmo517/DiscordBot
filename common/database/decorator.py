@@ -2,6 +2,7 @@
 from typing import Callable, Coroutine
 from functools import wraps
 from common.database.database import SessionLocal
+import logging
 
 # database decorator
 def database_connect(func: Callable[..., Coroutine]) -> Callable[..., Coroutine]:
@@ -18,7 +19,7 @@ def database_connect(func: Callable[..., Coroutine]) -> Callable[..., Coroutine]
         
         except Exception as e:
             # handles exceptions
-            print(f"An error occurred: {e}")
+            logging.error(f"An error occurred: {e}")
 
         finally:
             # closes sessions after running
