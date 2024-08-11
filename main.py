@@ -7,6 +7,7 @@ from common.database.database import SessionLocal, engine
 from fastapi import Depends
 from typing import Annotated
 from sqlalchemy.orm import Session
+import logging
 import common.database.models as models
 from commands.common.functions import returnServerEntity
 
@@ -57,7 +58,7 @@ async def on_ready():
 
     except Exception as e:
         # an error occured while querying
-        print(f"An error occurred while checking/adding server ID: {e}")
+        logging.error(f'An error occurred while checking/adding server ID: {e}')
 
     finally:
         # closes the session
@@ -76,7 +77,7 @@ async def on_ready():
     await bot.tree.sync(guild=guild)
 
     # verifies everything is logged in and synced
-    print(f'Logged in as {bot.user} and commands are synced for server {guild_id}')
+    logging.info(f'Logged in as {bot.user} and commands are synced for server {guild_id}')
 
 # runs the bot
 bot.run(TOKEN)
