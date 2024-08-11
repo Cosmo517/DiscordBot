@@ -32,7 +32,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 # Create all the tables
-# models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 # Initating Slash Commands
 
@@ -71,6 +71,7 @@ async def on_ready():
     await bot.load_extension('commands.gambling.roulette')
     await bot.load_extension('commands.money.balance')
     await bot.load_extension('commands.money.beg')
+    await bot.load_extension('commands.staff.kick')
 
     # sets up the command tree
     bot.tree.copy_global_to(guild=guild)
