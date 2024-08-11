@@ -6,14 +6,23 @@ from common.database.database import SessionLocal
 # database decorator
 def database_connect(func: Callable[..., Coroutine]) -> Callable[..., Coroutine]:
     @wraps(func)
+
+    # inner wrapped vunction
     async def wrapper(*args, **kwargs):
-        session = SessionLocal()
+        session = SessionLocal() # created session
+
         try:
+            # safely runs inner function
             result = await func(*args, **kwargs, session=session)
             return result
+        
         except Exception as e:
+            # handles exceptions
             print(f"An error occurred: {e}")
-        finally:
-            session.close()
 
+        finally:
+            # closes sessions after running
+            session.close()
+    
+    # returns the inner wrapped function
     return wrapper

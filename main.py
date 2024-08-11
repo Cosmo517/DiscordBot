@@ -34,6 +34,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 # models.Base.metadata.create_all(bind=engine)
 
 # Initating Slash Commands
+
 @bot.event
 async def on_ready():
     """
