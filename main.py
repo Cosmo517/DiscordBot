@@ -8,8 +8,12 @@ from fastapi import Depends
 from typing import Annotated
 from sqlalchemy.orm import Session
 import logging
-import common.database.models as models
-from commands.common.functions import returnServerEntity
+from common.database.models import Servers, Base
+from commands.common.functions import returnServerEntity, generateItems
+
+# debugging
+logging.basicConfig(level=logging.DEBUG)
+############
 
 # Setting up variables
 load_dotenv()
@@ -32,10 +36,9 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 # Create all the tables
-# models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 # Initating Slash Commands
-
 @bot.event
 async def on_ready():
     """
@@ -54,11 +57,14 @@ async def on_ready():
 
     try:
         # queries, looking for the server
-        server_entry = returnServerEntity(server_id=guild_id, session=session)
+        server_entry = returnServerEntity(Servers(server_id=guild_id), session=session)
+
+        # generates all the items for the bot
+        generateItems(session=session)
 
     except Exception as e:
         # an error occured while querying
-        logging.error(f'An error occurred while checking/adding server ID: {e}')
+        logging.error(f'An error occurred while running main.py database content: {e}')
 
     finally:
         # closes the session

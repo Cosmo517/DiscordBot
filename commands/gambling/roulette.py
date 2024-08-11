@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from typing import Literal
 import random as rand
+from common.database.models import Users, ServerToUsers
 from common.database.decorator import database_connect
 from commands.common.functions import returnUserEntity, returnServerToUsersEntity
 
@@ -14,10 +15,10 @@ async def roulette_command(interaction: discord.Interaction, amount: int, color:
     server_id = str(interaction.guild.id)
 
     # checks that the user exists
-    user = returnUserEntity(discord_id=discord_id, session=session)
+    user = returnUserEntity(Users(discord_id=discord_id), session=session)
 
     # checks that the servertouser exists
-    user_entry = returnServerToUsersEntity(discord_id=discord_id, server_id=server_id, session=session)
+    user_entry = returnServerToUsersEntity(ServerToUsers(discord_id=discord_id, server_id=server_id), session=session)
 
     # balance handling
     current_balance = user_entry.money
