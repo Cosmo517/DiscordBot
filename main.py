@@ -7,7 +7,9 @@ from common.database.database import SessionLocal, engine
 from fastapi import Depends
 from typing import Annotated
 from sqlalchemy.orm import Session
+import logging
 import common.database.models as models
+from commands.common.functions import returnServerEntity
 
 # Setting up variables
 load_dotenv()
@@ -30,9 +32,10 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 # Create all the tables
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 # Initating Slash Commands
+
 @bot.event
 async def on_ready():
     """
@@ -42,22 +45,39 @@ async def on_ready():
     Returns: None
     """
 
-    # Guild varaible stuff (The server ID)
+    # guild variables (stuff for ServerID)
     guild_id = 1271479998154543114
     guild = discord.Object(id=guild_id)
 
-    # Loads the extensions (commands)
+    # opens the datababse session
+    session = SessionLocal()
+
+    try:
+        # queries, looking for the server
+        server_entry = returnServerEntity(server_id=guild_id, session=session)
+
+    except Exception as e:
+        # an error occured while querying
+        logging.error(f'An error occurred while checking/adding server ID: {e}')
+
+    finally:
+        # closes the session
+        session.close()
+
+    # loads in the extension modules (command python files)
     await bot.load_extension('commands.basic.help')
     await bot.load_extension('commands.gambling.blackjack')
     await bot.load_extension('commands.basic.test')
     await bot.load_extension('commands.gambling.roulette')
+    await bot.load_extension('commands.money.balance')
+    await bot.load_extension('commands.money.beg')
 
-    # Sets up the command tree
+    # sets up the command tree
     bot.tree.copy_global_to(guild=guild)
     await bot.tree.sync(guild=guild)
 
-    # Confirms the commands are loaded and synced
-    print(f'Logged in as {bot.user} and commands are synced for server {guild_id}')
+    # verifies everything is logged in and synced
+    logging.info(f'Logged in as {bot.user} and commands are synced for server {guild_id}')
 
-# Runs the bot
+# runs the bot
 bot.run(TOKEN)
