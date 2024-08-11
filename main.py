@@ -8,8 +8,7 @@ from fastapi import Depends
 from typing import Annotated
 from sqlalchemy.orm import Session
 import common.database.models as models
-from common.database.database import SessionLocal
-from common.database.models import Servers
+from commands.common.functions import returnServerEntity
 
 # Setting up variables
 load_dotenv()
@@ -53,17 +52,7 @@ async def on_ready():
 
     try:
         # queries, looking for the server
-        server_entry = session.query(Servers).filter_by(server_id=str(guild_id)).first()
-        
-        if not server_entry:
-            # no server found, add it to the list
-            new_server = Servers(server_id=str(guild_id))
-            session.add(new_server)
-            session.commit()
-            print(f"Server ID ({guild_id}) added to the database")
-        else:
-            # server already exists
-            print(f"Server ID ({guild_id}) already exists in the database")
+        server_entry = returnServerEntity(server_id=guild_id, session=session)
 
     except Exception as e:
         # an error occured while querying
