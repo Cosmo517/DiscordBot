@@ -19,6 +19,7 @@ class Items(Base):
     item_name = Column(String(25), nullable=False)
     item_desc = Column(String(256), nullable=True)
     item_value = Column(Integer, nullable=True)
+    item_icon = Column(String(3), nullable=False)
 
 # Create the table to store the servers a user is in
 class ServerToUsers(Base):
@@ -30,6 +31,7 @@ class ServerToUsers(Base):
 # Create a table to store the users inventory
 class UserInventory(Base):
     __tablename__ = "userinventory"
+    server_id = Column(String(30), ForeignKey('servers.server_id'), primary_key=True)
     discord_id = Column(String(30), ForeignKey('users.discord_id'), primary_key=True)
     item_id = Column(Integer, ForeignKey('items.item_id'), primary_key=True)
     quantity = Column(Integer, nullable=False)

@@ -11,9 +11,10 @@ class ServersBase(BaseModel):
 
 class ItemsBase(BaseModel):
     item_id: int
-    item_nam: str
+    item_name: str
     item_desc: str
     item_value: int
+    item_icon: str
 
 class ServersToUsersBase(BaseModel):
     discord_id: str
@@ -21,6 +22,7 @@ class ServersToUsersBase(BaseModel):
     money: int
 
 class UserInventoryBase(BaseModel):
+    server_id: str
     discord_id: str
     item_id: int
     quantity: int
