@@ -68,6 +68,8 @@ async def on_ready():
     await bot.load_extension('commands.gambling.blackjack')
     await bot.load_extension('commands.basic.test')
     await bot.load_extension('commands.gambling.roulette')
+    await bot.load_extension('commands.money.balance')
+    await bot.load_extension('commands.money.beg')
 
     # sets up the command tree
     bot.tree.copy_global_to(guild=guild)

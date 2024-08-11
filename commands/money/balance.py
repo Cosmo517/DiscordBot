@@ -1,4 +1,4 @@
-# /commands/gambling/roulette.py
+# /commands/money/balance.py
 import discord
 from discord.ext import commands
 from typing import Literal
@@ -8,7 +8,7 @@ from commands.common.functions import returnUserEntity, returnServerToUsersEntit
 
 # Define the slash command
 @database_connect
-async def test_command(interaction: discord.Interaction, session=None):
+async def balance_command(interaction: discord.Interaction, session=None):
     discord_id = str(interaction.user.id)
     server_id = str(interaction.guild.id)
 
@@ -18,15 +18,12 @@ async def test_command(interaction: discord.Interaction, session=None):
     # checks that the servertouser exists
     user_entry = returnServerToUsersEntity(discord_id=discord_id, server_id=server_id, session=session)
 
-
     # embedded message
     embed = discord.Embed(
-        title="Test Command",
-        description=f"Stuff",
-        color=discord.Color.blue()
+        title="💰Account Balance",
+        description=f"Balance: ${user_entry.money}",
+        color=discord.Color.green()
     )
-    embed.add_field(name="Text", value=f"Sub-Text", inline=False)
-    embed.set_footer(text="Tiny Text")
 
     # send the embedded message
     await interaction.response.send_message(embed=embed)
@@ -35,11 +32,11 @@ async def test_command(interaction: discord.Interaction, session=None):
 # Adds the command to the slash command list
 async def setup(bot: commands.Bot):
     async def wrapper(interaction: discord.Interaction):
-        await test_command(interaction)
+        await balance_command(interaction)
 
     command = discord.app_commands.Command(
-        name="test",
-        description="Testing function",
+        name="balance",
+        description="Displays current balance of the user",
         callback=wrapper
     )
     bot.tree.add_command(command)
