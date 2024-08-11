@@ -1,7 +1,6 @@
 # /commands/gambling/roulette.py
 import discord
 from discord.ext import commands
-from typing import Literal
 from common.database.decorator import database_connect
 from commands.common.functions import returnUserEntity, returnServerToUsersEntity
 

@@ -25,7 +25,6 @@ def returnUserEntity(discord_id: str, session: Session):
 def returnServerEntity(server_id: str, session: Session):
     # queries server entity
     server = session.query(Servers).filter_by(server_id=str(server_id)).first()
-
     if not server:
         # entity doesn't exist; create new entity
         server = Servers(server_id=str(server_id))
