@@ -24,6 +24,7 @@ def returnUserEntity(data: Users, session: Session):
 # SERVER ENITTY
 def returnServerEntity(data: Servers, session: Session):
     # queries server entity
+
     server = session.query(Servers).filter_by(server_id=str(data.server_id)).first()
 
     if not server:
