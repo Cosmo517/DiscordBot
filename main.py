@@ -79,6 +79,7 @@ async def on_ready():
     await bot.load_extension('commands.money.balance')
     await bot.load_extension('commands.money.beg')
     await bot.load_extension('commands.staff.kick')
+    await bot.load_extension('commands.staff.warn')
 
     # sets up the command tree
     bot.tree.copy_global_to(guild=guild)

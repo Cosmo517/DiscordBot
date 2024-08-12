@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from common.database.database import Base
 
 # Create the users table
@@ -27,6 +27,23 @@ class ServerToUsers(Base):
     discord_id = Column(String(30), ForeignKey('users.discord_id'), primary_key=True)
     server_id = Column(String(30), ForeignKey('servers.server_id'), primary_key=True)
     money = Column(Integer, nullable=False)
+    banned = Column(Boolean, nullable=False)
+
+# Create a table to store user warn information
+class Warns(Base):
+    __tablename__ = "warns"
+    index = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    discord_id = Column(String(30), ForeignKey('users.discord_id'))
+    server_id = Column(String(30), ForeignKey('servers.server_id'))
+    reason = Column(String(256), nullable=True)
+
+# Create a table to store user ban information
+class Bans(Base):
+    __tablename__ = "bans"
+    index = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    discord_id = Column(String(30), ForeignKey('users.discord_id'))
+    server_id = Column(String(30), ForeignKey('servers.server_id'))
+    reason = Column(String(256), nullable=True)
 
 # Create a table to store the users inventory
 class UserInventory(Base):

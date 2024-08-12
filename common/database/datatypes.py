@@ -26,3 +26,13 @@ class UserInventoryBase(BaseModel):
     discord_id: str
     item_id: int
     quantity: int
+
+class BansBase(BaseModel):
+    server_id: str
+    discord_id: str
+    reason: str
+    
+class WarnsBase(BaseModel):
+    server_id: str
+    discord_id: str
+    reason: str

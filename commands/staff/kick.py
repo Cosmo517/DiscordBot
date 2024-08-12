@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
-from common.database.decorator import database_connect
-from discord.ext.commands import has_permissions, MissingPermissions
+from discord.ext.commands import has_permissions
 
 @has_permissions(kick_members=True)
 async def kick(ctx: discord.Interaction, member: discord.Member, reason: str):
