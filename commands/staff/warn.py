@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from commands.common.functions import addUserWarn, returnUserWarnings
+from commands.common.staff_functions import addUserWarn, returnUserWarnings
 from common.database.datatypes import WarnsBase
 from common.database.decorator import database_connect
 
@@ -12,7 +12,7 @@ async def warn(ctx: discord.Interaction, member: discord.Member, reason: str, se
     if warning:
         embed = discord.Embed(
         title="Warning",
-        description=f"Used Warned: {member.mention}",
+        description=f"User Warned: {member.mention}",
         color=discord.Color.red()
         )
         embed.add_field(name="Total Warnings:", value=f"{total_warns}", inline=False)

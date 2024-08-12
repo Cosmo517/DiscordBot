@@ -56,28 +56,6 @@ def returnServerToUsersEntity(data: ServersToUsersBase, session: Session):
     logging.info(f'[INFO]: Returned ServerToUser Line ({data.discord_id}, {data.server_id}) from the database')
     return user_entry
 
-# Adds a warn to the user when the warn command is used.
-def addUserWarn(data: WarnsBase, session: Session):
-    # Make sure the user exists in each table
-    user = returnUserEntity(Users(discord_id=data.discord_id), session=session)
-    server = returnServerEntity(Servers(server_id=data.server_id), session=session)
-    server_to_user = returnServerToUsersEntity(ServerToUsers(discord_id=data.discord_id, server_id=data.server_id, money=0), session=session)
-    
-    if user and server and server_to_user:
-        session.add(Warns(discord_id=data.discord_id, server_id=data.server_id, reason=data.reason))
-        session.commit()
-        logging.info(f'[INFO]: Added a warning for user {data.discord_id} on server {data.server_id} with reason {data.reason}')
-        return True
-    else:
-        logging.warning(f"[WARNING]: Failed to add user, server, or server_to_user with: {data} while adding a warning")
-        return False
-
-# Return all the warns a user has
-def returnUserWarnings(data: WarnsBase, session: Session):
-    warns = session.query(Warns).filter_by(discord_id=data.discord_id,
-                                           server_id=data.server_id).all()
-    return warns
-
 # ADDS AN ITEM
 def returnItem(data: ItemsBase, session: Session):
     # queries Items eneity
